@@ -10,8 +10,8 @@
  * (verificar_nivel), que validam o PIN antes de qualquer leitura/escrita.
  * As tabelas em si NÃO são acessíveis diretamente por essa chave.
  */
-const SUPABASE_URL = 'https://kgdujfhqthskloaiumjl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnZHVqZmhxdGhza2xvYWl1bWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NjUxNTQsImV4cCI6MjEwNTE0MTE1NH0.nSJLq9qhvPvkN44g8cukNLza1MAfgzu-Krfew92ANXg';
+const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_SEU_PROJETO_SUPABASE';
+const SUPABASE_KEY = 'COLE_AQUI_A_ANON_KEY_DO_SEU_PROJETO_SUPABASE';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ---------- ESTADO GLOBAL ----------
@@ -67,7 +67,7 @@ async function chamarApi(action, payload = {}) {
     case 'listPostos': {
       const { data, error } = await db.rpc('listar_postos', { p_pin: pin });
       if (error) throw new Error(error.message);
-      return (data || []).map(r => Object.values(r)[0]);
+      return (data || []).map(r => (typeof r === 'string' ? r : Object.values(r)[0]));
     }
     case 'addPosto': {
       const { error } = await db.rpc('adicionar_posto', { p_pin: pin, p_posto: p.posto });
@@ -101,7 +101,7 @@ async function chamarApi(action, payload = {}) {
     case 'listRecebidoPor': {
       const { data, error } = await db.rpc('listar_recebido_por', { p_pin: pin });
       if (error) throw new Error(error.message);
-      return (data || []).map(r => Object.values(r)[0]);
+      return (data || []).map(r => (typeof r === 'string' ? r : Object.values(r)[0]));
     }
     case 'addRecebidoPor': {
       const { error } = await db.rpc('adicionar_recebido_por', { p_pin: pin, p_nome: p.nome });
@@ -118,7 +118,7 @@ async function chamarApi(action, payload = {}) {
     case 'listAutorizadoPor': {
       const { data, error } = await db.rpc('listar_autorizado_por', { p_pin: pin });
       if (error) throw new Error(error.message);
-      return (data || []).map(r => Object.values(r)[0]);
+      return (data || []).map(r => (typeof r === 'string' ? r : Object.values(r)[0]));
     }
     case 'addAutorizadoPor': {
       const { error } = await db.rpc('adicionar_autorizado_por', { p_pin: pin, p_nome: p.nome });
