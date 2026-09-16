@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Permutas — GCM Iguatu</title>
+<link rel="icon" type="image/png" href="img/brasao-gcm.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== TELA DE LOGIN (PIN) ===================== -->
+<div id="tela-login">
+  <h1>CONTROLE DE PERMUTAS</h1>
+  <p class="subtitulo">GCM Iguatu — Acesso restrito</p>
+  <div id="pin-display"></div>
+  <div id="pin-erro"></div>
+  <div class="pin-pad">
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button class="acao" id="btn-limpar">Limpar</button>
+    <button data-num="0">0</button>
+    <button class="acao" id="btn-apagar">⌫</button>
+  </div>
+</div>
+
+<!-- ===================== APP PRINCIPAL ===================== -->
+<div id="app" class="hidden">
+  <header class="topo">
+    <h1>Controle de Permutas — GCM Iguatu</h1>
+    <div>
+      <span class="usuario" id="usuario-logado"></span>
+      <button id="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <nav class="abas">
+    <button data-aba="hoje" class="ativa">Hoje</button>
+    <button data-aba="permutas">Permutas</button>
+    <button data-aba="folgas">Folgas</button>
+    <button data-aba="hp">HP</button>
+    <button data-aba="devendo">Devendo</button>
+    <button data-aba="admin" id="aba-admin-botao" class="hidden">Painel Admin</button>
+  </nav>
+
+  <div id="status-carregamento" class="status-carregamento hidden">
+    <span id="status-carregamento-texto">Carregando dados...</span>
+    <button id="btn-tentar-novamente-carregamento" class="btn-secundario hidden">Tentar novamente</button>
+  </div>
+
+  <main class="conteudo">
+
+    <!-- ---------- ABA HOJE ---------- -->
+    <section id="secao-hoje">
+      <div class="painel-hoje">
+        <div class="painel-hoje-cabecalho">
+          <div>
+            <p class="painel-hoje-selo">PAINEL DO DIA</p>
+            <p class="painel-hoje-data" id="hoje-data-extenso">—</p>
+          </div>
+          <span class="painel-hoje-icone"><img src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu"></span>
+        </div>
+        <div class="painel-hoje-metricas">
+          <div class="painel-hoje-metrica">
+            <p class="painel-hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
+            <p class="painel-hoje-metrica-label">Permutas hoje</p>
+          </div>
+          <div class="painel-hoje-metrica">
+            <p class="painel-hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
+            <p class="painel-hoje-metrica-label">Folgas hoje</p>
+          </div>
+        </div>
+        <div class="painel-hoje-colunas">
+          <div>
+            <p class="painel-hoje-coluna-titulo">🔁 Permutas</p>
+            <div id="hoje-lista-permutas"></div>
+          </div>
+          <div>
+            <p class="painel-hoje-coluna-titulo">🏖️ Folgas previstas</p>
+            <div id="hoje-lista-folgas"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ABA PERMUTAS ---------- -->
+    <section id="secao-permutas" class="hidden">
+      <div class="barra-acoes">
+        <label>De: <input type="date" id="filtro-data-inicio"></label>
+        <label>Até: <input type="date" id="filtro-data-fim"></label>
+        <button class="btn-secundario" id="btn-filtrar">Filtrar</button>
+        <button class="btn-secundario" id="btn-limpar-filtro">Limpar filtro</button>
+        <button class="btn-principal" id="btn-nova-permuta">+ Nova Permuta</button>
+        <button class="btn-principal" id="btn-lote-permutas">+ Várias Permutas</button>
+        <button class="btn-secundario" id="btn-pdf-permutas">📄 PDF de Permutas</button>
+        <button class="btn-secundario" id="btn-pdf-combinado">📄 PDF Permutas + Folgas</button>
+      </div>
+      <div class="tabela-wrapper">
+        <table class="tabela-dados">
+          <thead>
+            <tr>
+              <th>Data</th><th>Posto</th><th>Turno</th><th>Escalado</th><th>Substituto</th>
+              <th>HP</th><th>Recebido</th><th>Recebido por</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="corpo-tabela-permutas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- ABA FOLGAS ---------- -->
+    <section id="secao-folgas" class="hidden">
+      <div class="barra-acoes">
+        <label>De: <input type="date" id="filtro-folga-data-inicio"></label>
+        <label>Até: <input type="date" id="filtro-folga-data-fim"></label>
+        <button class="btn-secundario" id="btn-filtrar-folgas">Filtrar</button>
+        <button class="btn-secundario" id="btn-limpar-filtro-folgas">Limpar filtro</button>
+        <button class="btn-principal" id="btn-nova-folga">+ Nova Folga</button>
+      </div>
+      <div class="tabela-wrapper">
+        <table class="tabela-dados">
+          <thead>
+            <tr><th>Data</th><th>QRA</th><th>Posto</th><th>Observação</th><th></th></tr>
+          </thead>
+          <tbody id="corpo-tabela-folgas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- ABA HP (RANKING) ---------- -->
+    <section id="secao-hp" class="hidden">
+      <div class="barra-acoes">
+        <label>Mês: <input type="month" id="filtro-hp-mes"></label>
+        <button class="btn-secundario" id="btn-ver-ranking-hp">Ver ranking</button>
+      </div>
+      <p style="font-size:13px; color:#666; margin-top:-6px;">
+        <span class="hp-selo hp-verde">até 119h</span>
+        <span class="hp-selo hp-laranja">120h</span>
+        <span class="hp-selo hp-vermelho">acima de 120h</span>
+      </p>
+      <div class="tabela-wrapper">
+        <table class="tabela-dados">
+          <thead>
+            <tr><th>#</th><th>Agente (Escalado)</th><th>HP no mês</th></tr>
+          </thead>
+          <tbody id="corpo-tabela-hp"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- ABA DEVENDO ---------- -->
+    <section id="secao-devendo" class="hidden">
+      <div class="barra-acoes">
+        <label>De: <input type="date" id="filtro-devendo-data-inicio"></label>
+        <label>Até: <input type="date" id="filtro-devendo-data-fim"></label>
+        <button class="btn-secundario" id="btn-filtrar-devendo">Filtrar</button>
+        <button class="btn-secundario" id="btn-limpar-filtro-devendo">Limpar filtro</button>
+        <button class="btn-principal" id="btn-nova-devendo">+ Novo Devendo</button>
+      </div>
+      <div class="tabela-wrapper">
+        <table class="tabela-dados">
+          <thead>
+            <tr><th>Data</th><th>QRA</th><th>Turno</th><th>Posto</th><th>Autorizado por</th><th>Observação</th><th></th></tr>
+          </thead>
+          <tbody id="corpo-tabela-devendo"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- ABA ADMIN ---------- -->
+    <section id="secao-admin" class="hidden">
+      <div class="grid-admin">
+        <div class="cartao-admin">
+          <h3>Postos</h3>
+          <ul class="lista-simples" id="lista-postos"></ul>
+          <form class="form-inline" id="form-add-posto">
+            <input type="text" id="input-novo-posto" placeholder="Novo posto" required>
+            <button class="btn-principal" type="submit">+</button>
+          </form>
+        </div>
+
+        <div class="cartao-admin">
+          <h3>Turnos</h3>
+          <ul class="lista-simples" id="lista-turnos"></ul>
+          <form class="form-inline" id="form-add-turno">
+            <input type="text" id="input-novo-turno" placeholder="Nome do turno" required>
+            <input type="number" id="input-novo-turno-horas" placeholder="Horas" style="max-width:70px" required>
+            <button class="btn-principal" type="submit">+</button>
+          </form>
+        </div>
+
+        <div class="cartao-admin">
+          <h3>Recebido por</h3>
+          <ul class="lista-simples" id="lista-recebido-por"></ul>
+          <form class="form-inline" id="form-add-recebido-por">
+            <input type="text" id="input-novo-recebido-por" placeholder="Nome" required>
+            <button class="btn-principal" type="submit">+</button>
+          </form>
+        </div>
+
+        <div class="cartao-admin">
+          <h3>Autorizado por</h3>
+          <ul class="lista-simples" id="lista-autorizado-por"></ul>
+          <form class="form-inline" id="form-add-autorizado-por">
+            <input type="text" id="input-novo-autorizado-por" placeholder="Nome" required>
+            <button class="btn-principal" type="submit">+</button>
+          </form>
+        </div>
+
+        <div class="cartao-admin">
+          <h3>Funcionários</h3>
+          <ul class="lista-simples" id="lista-funcionarios"></ul>
+          <form id="form-add-funcionario" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+            <input type="text" id="input-func-nome" placeholder="Nome completo" required>
+            <input type="text" id="input-func-classe" placeholder="Classe (ex: GCM 3° CLASSE)" required>
+            <input type="text" id="input-func-qra" placeholder="QRA (ex: GCM 3° CLASSE SILVA)" required>
+            <input type="email" id="input-func-email" placeholder="Email (opcional)">
+            <button class="btn-principal" type="submit">Adicionar funcionário</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===================== MODAL — NOVA/EDITAR PERMUTA ===================== -->
+<div id="modal-permuta" class="overlay hidden">
+  <div class="modal">
+    <h2 id="modal-permuta-titulo">Nova Permuta</h2>
+    <form id="form-permuta">
+      <input type="hidden" id="permuta-id">
+      <input type="hidden" id="permuta-novo-id">
+      <div class="campo">
+        <label>Data</label>
+        <input type="date" id="permuta-data" required>
+      </div>
+      <div class="campo">
+        <label>Posto</label>
+        <select id="permuta-posto" required></select>
+      </div>
+      <div class="campo">
+        <label>Turno</label>
+        <select id="permuta-turno" required></select>
+      </div>
+      <div class="campo">
+        <label>Escalado</label>
+        <input type="text" id="permuta-escalado-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="permuta-escalado-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-escalado"></div>
+      </div>
+      <div class="campo">
+        <label>Substituto</label>
+        <input type="text" id="permuta-substituto-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="permuta-substituto-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-substituto"></div>
+      </div>
+      <div class="campo">
+        <label>Recebido (data)</label>
+        <input type="date" id="permuta-recebido">
+      </div>
+      <div class="campo">
+        <label>Recebido por</label>
+        <select id="permuta-recebido-por"></select>
+      </div>
+      <div class="modal-acoes">
+        <button type="button" class="btn-secundario" id="btn-cancelar-permuta">Cancelar</button>
+        <button type="submit" class="btn-principal">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== MODAL — NOVA/EDITAR FOLGA ===================== -->
+<div id="modal-folga" class="overlay hidden">
+  <div class="modal">
+    <h2 id="modal-folga-titulo">Nova Folga</h2>
+    <form id="form-folga">
+      <input type="hidden" id="folga-id">
+      <input type="hidden" id="folga-novo-id">
+      <div class="campo">
+        <label>QRA</label>
+        <input type="text" id="folga-qra-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="folga-qra-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-folga-qra"></div>
+      </div>
+      <div class="campo">
+        <label>Data</label>
+        <input type="date" id="folga-data" required>
+      </div>
+      <div class="campo">
+        <label>Posto</label>
+        <select id="folga-posto" required></select>
+      </div>
+      <div class="campo">
+        <label>Observação</label>
+        <input type="text" id="folga-observacao" placeholder="Opcional">
+      </div>
+      <div class="modal-acoes">
+        <button type="button" class="btn-secundario" id="btn-cancelar-folga">Cancelar</button>
+        <button type="submit" class="btn-principal">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== MODAL — VÁRIAS PERMUTAS DE UMA VEZ ===================== -->
+<div id="modal-lote" class="overlay hidden">
+  <div class="modal">
+    <h2>Cadastrar Várias Permutas</h2>
+    <p style="font-size:13px; color:#666; margin-top:-8px;">
+      Use quando o mesmo agente solicitar várias datas/turnos de uma vez (até 120h, no total de 5 turnos de 24h).
+    </p>
+    <form id="form-lote">
+      <div class="campo">
+        <label>Posto</label>
+        <select id="lote-posto" required></select>
+      </div>
+      <div class="campo">
+        <label>Escalado</label>
+        <input type="text" id="lote-escalado-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="lote-escalado-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-lote-escalado"></div>
+      </div>
+      <div class="campo">
+        <label>Substituto</label>
+        <input type="text" id="lote-substituto-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="lote-substituto-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-lote-substituto"></div>
+      </div>
+      <div class="campo">
+        <label>Recebido (data)</label>
+        <input type="date" id="lote-recebido">
+      </div>
+      <div class="campo">
+        <label>Recebido por</label>
+        <select id="lote-recebido-por"></select>
+      </div>
+
+      <label style="display:block; font-weight:bold; color:var(--navy); margin:16px 0 8px; font-size:14px;">
+        Datas e turnos (até 5)
+      </label>
+      <div id="lote-linhas"></div>
+      <button type="button" class="btn-secundario" id="btn-add-linha-lote">+ Adicionar outra data</button>
+
+      <div class="modal-acoes">
+        <button type="button" class="btn-secundario" id="btn-cancelar-lote">Cancelar</button>
+        <button type="submit" class="btn-principal">Salvar todas</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== MODAL — NOVO/EDITAR DEVENDO ===================== -->
+<div id="modal-devendo" class="overlay hidden">
+  <div class="modal">
+    <h2 id="modal-devendo-titulo">Novo Devendo</h2>
+    <form id="form-devendo">
+      <input type="hidden" id="devendo-id">
+      <input type="hidden" id="devendo-novo-id">
+      <div class="campo">
+        <label>QRA</label>
+        <input type="text" id="devendo-qra-busca" placeholder="Digite para buscar..." autocomplete="off" required>
+        <input type="hidden" id="devendo-qra-valor">
+        <div class="autocomplete-lista hidden" id="lista-autocomplete-devendo-qra"></div>
+      </div>
+      <div class="campo">
+        <label>Data da falta</label>
+        <input type="date" id="devendo-data" required>
+      </div>
+      <div class="campo">
+        <label>Turno</label>
+        <select id="devendo-turno" required></select>
+      </div>
+      <div class="campo">
+        <label>Posto</label>
+        <select id="devendo-posto" required></select>
+      </div>
+      <div class="campo">
+        <label>Autorizado por</label>
+        <select id="devendo-autorizado-por" required></select>
+      </div>
+      <div class="campo">
+        <label>Observação</label>
+        <input type="text" id="devendo-observacao" placeholder="Opcional — motivo, detalhes...">
+      </div>
+      <div class="modal-acoes">
+        <button type="button" class="btn-secundario" id="btn-cancelar-devendo">Cancelar</button>
+        <button type="submit" class="btn-principal">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Cliente Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- jsPDF (geração de PDF no navegador) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

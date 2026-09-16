@@ -1,0 +1,549 @@
+:root {
+  --navy: #1A2B5E;
+  --navy-dark: #10193d;
+  --gold: #C8A84B;
+  --gold-light: #e6d5a0;
+  --bg: #f4f2ec;
+  --white: #ffffff;
+  --danger: #b3413a;
+  --text: #21273a;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+}
+
+.hidden { display: none !important; }
+
+/* ---------- TELA DE LOGIN (PIN) ---------- */
+
+#tela-login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: var(--white);
+  padding: 24px;
+}
+
+#tela-login h1 {
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  font-size: 22px;
+  text-align: center;
+}
+
+#tela-login p.subtitulo {
+  color: #cfd6ec;
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+#pin-display {
+  width: 220px;
+  text-align: center;
+  font-size: 30px;
+  letter-spacing: 12px;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 12px 0;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.05);
+  color: var(--white);
+  min-height: 24px;
+}
+
+#pin-erro {
+  color: #ff9d95;
+  min-height: 18px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  gap: 12px;
+}
+
+.pin-pad button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+  font-size: 22px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pin-pad button:hover { background: var(--gold); color: var(--navy); }
+
+.pin-pad button.acao {
+  border-color: transparent;
+  font-size: 14px;
+  background: transparent;
+}
+
+/* ---------- APP PRINCIPAL ---------- */
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header.topo {
+  background: var(--navy);
+  color: var(--white);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header.topo h1 { font-size: 18px; margin: 0; color: var(--gold); }
+header.topo .usuario { font-size: 15px; color: #cfd6ec; }
+header.topo button#btn-sair {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+nav.abas {
+  display: flex;
+  gap: 4px;
+  background: var(--navy-dark);
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+nav.abas button {
+  background: transparent;
+  border: none;
+  color: #cfd6ec;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+nav.abas button.ativa {
+  color: var(--gold);
+  border-bottom: 3px solid var(--gold);
+  font-weight: bold;
+}
+
+/* ---------- PAINEL "HOJE" (aba dedicada — visual azul intenso) ---------- */
+
+.painel-hoje {
+  background: #152552;
+  border-radius: 12px;
+  padding: 24px;
+  color: #fff;
+}
+
+.painel-hoje-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.painel-hoje-selo {
+  font-size: 12px;
+  color: #D9BD6E;
+  margin: 0 0 4px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.painel-hoje-data {
+  margin: 0;
+  font-size: 19px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.painel-hoje-icone {
+  font-size: 28px;
+}
+
+.painel-hoje-icone img {
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+.painel-hoje-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.painel-hoje-metrica {
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.painel-hoje-metrica-numero {
+  margin: 0 0 2px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.painel-hoje-metrica-numero.destaque {
+  color: #D9BD6E;
+}
+
+.painel-hoje-metrica-label {
+  margin: 0;
+  font-size: 12px;
+  color: #B9C4E0;
+}
+
+.painel-hoje-colunas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 24px;
+}
+
+.painel-hoje-coluna-titulo {
+  font-size: 13px;
+  font-weight: bold;
+  color: #D9BD6E;
+  margin: 0 0 10px;
+}
+
+.painel-hoje-item {
+  border-left: 3px solid #D9BD6E;
+  border-radius: 0;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.06);
+}
+
+.painel-hoje-item.folga { border-left-color: #6E8FD9; }
+
+.painel-hoje-item-titulo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.painel-hoje-item-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #B9C4E0;
+}
+
+.painel-hoje-vazio {
+  font-style: italic;
+  color: #B9C4E0;
+  font-size: 13px;
+  margin: 0;
+}
+
+main.conteudo {
+  flex: 1;
+  padding: 20px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.barra-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.barra-acoes input[type="date"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+}
+
+button.btn-principal {
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button.btn-principal:hover { background: var(--navy-dark); }
+
+button.btn-secundario {
+  background: var(--white);
+  color: var(--navy);
+  border: 1px solid var(--navy);
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+button.btn-perigo {
+  background: var(--white);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 7px 11px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ---------- RESPONSIVIDADE (telas pequenas / celular) ----------
+   Estas regras só entram em ação abaixo de 768px de largura.
+   A versão para telas grandes (desktop) não é afetada. */
+@media (max-width: 768px) {
+  header.topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  header.topo h1 { font-size: 16px; }
+
+  main.conteudo { padding: 12px; }
+
+  .barra-acoes {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .barra-acoes label { display: flex; flex-direction: column; font-size: 14px; }
+  .barra-acoes input[type="date"] { width: 100%; }
+
+  .barra-acoes button {
+    width: 100%;
+  }
+
+  table.tabela-dados { min-width: 720px; } /* mantém colunas legíveis; a rolagem horizontal do .tabela-wrapper cuida do resto */
+
+  .modal { padding: 16px; }
+
+  .grid-admin { grid-template-columns: 1fr; }
+
+  .pin-pad { grid-template-columns: repeat(3, 64px); gap: 10px; }
+  .pin-pad button { width: 64px; height: 64px; font-size: 20px; }
+}
+
+.tabela-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+table.tabela-dados {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  overflow: hidden;
+}
+
+table.tabela-dados th {
+  background: var(--navy);
+  color: var(--gold);
+  padding: 10px;
+  text-align: left;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+table.tabela-dados td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+
+table.tabela-dados tr:hover { background: #faf8f2; }
+
+/* Botões de ação (Editar/Excluir) nas tabelas: mesmo tamanho, com pequena margem entre eles */
+.tabela-dados td:last-child {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.tabela-dados td:last-child button {
+  flex: 1;
+  min-width: 66px;
+  padding: 6px 10px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- MODAL ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16,25,61,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 { color: var(--navy); margin-top: 0; border-bottom: 2px solid var(--gold); padding-bottom: 8px; }
+
+.campo { margin-bottom: 14px; position: relative; }
+.campo label { display: block; font-size: 15px; margin-bottom: 4px; color: var(--navy); font-weight: bold; }
+.campo input, .campo select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 16px;
+}
+
+.modal-acoes { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+/* ---------- AUTOCOMPLETE ---------- */
+
+.autocomplete-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 50;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.autocomplete-lista div {
+  padding: 9px 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.autocomplete-lista div:hover { background: var(--gold-light); }
+
+/* ---------- ADMIN ---------- */
+
+.grid-admin {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.cartao-admin {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.cartao-admin h3 { color: var(--navy); margin-top: 0; }
+
+.lista-simples { list-style: none; padding: 0; margin: 0; }
+.lista-simples li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+
+.form-inline { display: flex; gap: 6px; margin-top: 10px; }
+.form-inline input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: var(--radius); font-size: 15px; }
+
+.mensagem-vazio { color: #888; font-style: italic; font-size: 15px; padding: 10px 0; }
+
+/* ---------- SELOS DE HP (verde até 119h, laranja em 120h, vermelho acima de 120h) ---------- */
+
+.hp-selo {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 13px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.hp-verde { background: #DFF5DF; color: #1a5c1a; }
+.hp-laranja { background: #FFDCA0; color: #7a4a00; }
+.hp-vermelho { background: #C0392B; color: #ffffff; }
+
+/* ---------- CADASTRO EM LOTE DE PERMUTAS ---------- */
+
+.linha-lote {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.linha-lote .campo-inline { flex: 1; margin-bottom: 0; }
+.linha-lote .campo-inline label { display:block; font-size: 12px; margin-bottom: 4px; color: var(--navy); font-weight: bold; }
+.linha-lote .campo-inline input, .linha-lote .campo-inline select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 15px;
+}
+
+.linha-lote .btn-remover-linha {
+  height: 40px;
+  padding: 0 12px;
+}
+
+/* ---------- BARRA DE STATUS DE CARREGAMENTO ---------- */
+
+.status-carregamento {
+  background: #FFF3CD;
+  color: #6b5b1e;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 14px;
+  border-bottom: 2px solid #E6C860;
+}
