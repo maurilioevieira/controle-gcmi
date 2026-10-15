@@ -218,11 +218,15 @@
           <h3>Funcionários</h3>
           <ul class="lista-simples" id="lista-funcionarios"></ul>
           <form id="form-add-funcionario" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+            <input type="hidden" id="input-func-qra-original">
             <input type="text" id="input-func-nome" placeholder="Nome completo" required>
             <input type="text" id="input-func-classe" placeholder="Classe (ex: GCM 3° CLASSE)" required>
             <input type="text" id="input-func-qra" placeholder="QRA (ex: GCM 3° CLASSE SILVA)" required>
             <input type="email" id="input-func-email" placeholder="Email (opcional)">
-            <button class="btn-principal" type="submit">Adicionar funcionário</button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-principal" type="submit" id="btn-salvar-funcionario">Adicionar funcionário</button>
+              <button class="btn-secundario hidden" type="button" id="btn-cancelar-edicao-funcionario">Cancelar</button>
+            </div>
           </form>
         </div>
       </div>

@@ -10,8 +10,8 @@
  * (verificar_nivel), que validam o PIN antes de qualquer leitura/escrita.
  * As tabelas em si NÃO são acessíveis diretamente por essa chave.
  */
-const SUPABASE_URL = 'https://kgdujfhqthskloaiumjl.supabase.co';
-const SUPABASE_KEY =  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnZHVqZmhxdGhza2xvYWl1bWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NjUxNTQsImV4cCI6MjEwNTE0MTE1NH0.nSJLq9qhvPvkN44g8cukNLza1MAfgzu-Krfew92ANXg';
+const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_SEU_PROJETO_SUPABASE';
+const SUPABASE_KEY = 'COLE_AQUI_A_ANON_KEY_DO_SEU_PROJETO_SUPABASE';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ---------- ESTADO GLOBAL ----------
@@ -140,6 +140,14 @@ async function chamarApi(action, payload = {}) {
     case 'addFuncionario': {
       const { error } = await db.rpc('adicionar_funcionario', {
         p_pin: pin, p_nome_completo: p.nomeCompleto, p_classe: p.classe, p_qra: p.qra, p_email: p.email || null
+      });
+      if (error) throw new Error(error.message);
+      return null;
+    }
+    case 'editFuncionario': {
+      const { error } = await db.rpc('editar_funcionario', {
+        p_pin: pin, p_qra_original: p.qraOriginal, p_nome_completo: p.nomeCompleto,
+        p_classe: p.classe, p_qra_novo: p.qra, p_email: p.email || null
       });
       if (error) throw new Error(error.message);
       return null;
@@ -991,8 +999,51 @@ function renderizarAdmin() {
   renderizarListaAdmin('lista-turnos', cacheTurnos.map(t => `${t.TURNO} (${t.HORAS}h)`), null, cacheTurnos.map(t => t.TURNO), (valor) => excluirItemAdmin('deleteTurno', { turno: valor }));
   renderizarListaAdmin('lista-recebido-por', cacheRecebidoPor, (valor) => excluirItemAdmin('deleteRecebidoPor', { nome: valor }));
   renderizarListaAdmin('lista-autorizado-por', cacheAutorizadoPor, (valor) => excluirItemAdmin('deleteAutorizadoPor', { nome: valor }));
-  renderizarListaAdmin('lista-funcionarios', cacheFuncionarios.map(f => f.QRA), (valor) => excluirItemAdmin('deleteFuncionario', { qra: valor }));
+  renderizarListaFuncionarios();
 }
+
+function renderizarListaFuncionarios() {
+  const ul = document.getElementById('lista-funcionarios');
+  if (cacheFuncionarios.length === 0) { ul.innerHTML = '<li class="mensagem-vazio">Nenhum registro.</li>'; return; }
+  ul.innerHTML = cacheFuncionarios.map(f => `
+    <li>
+      ${f.QRA}
+      <span style="display:flex; gap:6px;">
+        <button class="btn-secundario" data-qra="${f.QRA}" data-acao="editar">editar</button>
+        <button class="btn-perigo" data-qra="${f.QRA}" data-acao="remover">remover</button>
+      </span>
+    </li>`).join('');
+  ul.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = cacheFuncionarios.find(x => x.QRA === btn.dataset.qra);
+      if (btn.dataset.acao === 'editar') {
+        preencherFormEditarFuncionario(f);
+      } else {
+        if (!confirm('Remover este registro?')) return;
+        excluirItemAdmin('deleteFuncionario', { qra: btn.dataset.qra });
+      }
+    });
+  });
+}
+
+function preencherFormEditarFuncionario(f) {
+  document.getElementById('input-func-qra-original').value = f.QRA;
+  document.getElementById('input-func-nome').value = f.NOME_COMPLETO;
+  document.getElementById('input-func-classe').value = f.CLASSE;
+  document.getElementById('input-func-qra').value = f.QRA;
+  document.getElementById('input-func-email').value = f.EMAIL || '';
+  document.getElementById('btn-salvar-funcionario').textContent = 'Salvar alteração';
+  document.getElementById('btn-cancelar-edicao-funcionario').classList.remove('hidden');
+  document.getElementById('form-add-funcionario').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelarEdicaoFuncionario() {
+  document.getElementById('form-add-funcionario').reset();
+  document.getElementById('input-func-qra-original').value = '';
+  document.getElementById('btn-salvar-funcionario').textContent = 'Adicionar funcionário';
+  document.getElementById('btn-cancelar-edicao-funcionario').classList.add('hidden');
+}
+document.getElementById('btn-cancelar-edicao-funcionario').addEventListener('click', cancelarEdicaoFuncionario);
 
 function renderizarListaAdmin(idLista, textos, aoExcluir, valoresReais, aoExcluirComValorReal) {
   const ul = document.getElementById(idLista);
@@ -1070,9 +1121,16 @@ document.getElementById('form-add-funcionario').addEventListener('submit', async
   const classe = document.getElementById('input-func-classe');
   const qra = document.getElementById('input-func-qra');
   const email = document.getElementById('input-func-email');
+  const qraOriginal = document.getElementById('input-func-qra-original').value;
   try {
-    await chamarApi('addFuncionario', { nomeCompleto: nome.value, classe: classe.value, qra: qra.value.toUpperCase(), email: email.value });
-    nome.value = ''; classe.value = ''; qra.value = ''; email.value = '';
+    if (qraOriginal) {
+      await chamarApi('editFuncionario', {
+        qraOriginal, nomeCompleto: nome.value, classe: classe.value, qra: qra.value.toUpperCase(), email: email.value
+      });
+    } else {
+      await chamarApi('addFuncionario', { nomeCompleto: nome.value, classe: classe.value, qra: qra.value.toUpperCase(), email: email.value });
+    }
+    cancelarEdicaoFuncionario();
     await carregarListasBase();
     renderizarAdmin();
   } catch (e) { alert('Erro: ' + e.message); }
