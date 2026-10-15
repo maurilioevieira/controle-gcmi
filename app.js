@@ -10,8 +10,8 @@
  * (verificar_nivel), que validam o PIN antes de qualquer leitura/escrita.
  * As tabelas em si NÃO são acessíveis diretamente por essa chave.
  */
-const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_SEU_PROJETO_SUPABASE';
-const SUPABASE_KEY = 'COLE_AQUI_A_ANON_KEY_DO_SEU_PROJETO_SUPABASE';
+const SUPABASE_URL = 'https://kgdujfhqthskloaiumjl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnZHVqZmhxdGhza2xvYWl1bWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NjUxNTQsImV4cCI6MjEwNTE0MTE1NH0.nSJLq9qhvPvkN44g8cukNLza1MAfgzu-Krfew92ANXg';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ---------- ESTADO GLOBAL ----------
