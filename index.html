@@ -11,6 +11,7 @@
 
 <!-- ===================== TELA DE LOGIN (PIN) ===================== -->
 <div id="tela-login">
+  <img class="login-brasao" src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu">
   <h1>CONTROLE DE PERMUTAS</h1>
   <p class="subtitulo">GCM Iguatu — Acesso restrito</p>
   <div id="pin-display"></div>
@@ -33,206 +34,250 @@
 
 <!-- ===================== APP PRINCIPAL ===================== -->
 <div id="app" class="hidden">
-  <header class="topo">
-    <h1>Controle de Permutas — GCM Iguatu</h1>
-    <div>
-      <span class="usuario" id="usuario-logado"></span>
-      <button id="btn-sair">Sair</button>
-    </div>
-  </header>
+  <div class="layout-app">
 
-  <nav class="abas">
-    <button data-aba="hoje" class="ativa">Hoje</button>
-    <button data-aba="permutas">Permutas</button>
-    <button data-aba="folgas">Folgas</button>
-    <button data-aba="hp">HP</button>
-    <button data-aba="devendo">Devendo</button>
-    <button data-aba="admin" id="aba-admin-botao" class="hidden">Painel Admin</button>
-  </nav>
-
-  <div id="status-carregamento" class="status-carregamento hidden">
-    <span id="status-carregamento-texto">Carregando dados...</span>
-    <button id="btn-tentar-novamente-carregamento" class="btn-secundario hidden">Tentar novamente</button>
-  </div>
-
-  <main class="conteudo">
-
-    <!-- ---------- ABA HOJE ---------- -->
-    <section id="secao-hoje">
-      <div class="painel-hoje">
-        <div class="painel-hoje-cabecalho">
-          <div>
-            <p class="painel-hoje-selo">PAINEL DO DIA</p>
-            <p class="painel-hoje-data" id="hoje-data-extenso">—</p>
-          </div>
-          <span class="painel-hoje-icone"><img src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu"></span>
-        </div>
-        <div class="painel-hoje-metricas">
-          <div class="painel-hoje-metrica">
-            <p class="painel-hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
-            <p class="painel-hoje-metrica-label">Permutas hoje</p>
-          </div>
-          <div class="painel-hoje-metrica">
-            <p class="painel-hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
-            <p class="painel-hoje-metrica-label">Folgas hoje</p>
-          </div>
-        </div>
-        <div class="painel-hoje-colunas">
-          <div>
-            <p class="painel-hoje-coluna-titulo">🔁 Permutas</p>
-            <div id="hoje-lista-permutas"></div>
-          </div>
-          <div>
-            <p class="painel-hoje-coluna-titulo">🏖️ Folgas previstas</p>
-            <div id="hoje-lista-folgas"></div>
-          </div>
+    <!-- ---------- BARRA LATERAL ---------- -->
+    <aside class="sidebar">
+      <div class="sidebar-marca">
+        <img src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu">
+        <div>
+          <p class="sidebar-marca-titulo">Controle de Permutas</p>
+          <p class="sidebar-marca-sub">GCM Iguatu</p>
         </div>
       </div>
-    </section>
 
-    <!-- ---------- ABA PERMUTAS ---------- -->
-    <section id="secao-permutas" class="hidden">
-      <div class="barra-acoes">
-        <label>De: <input type="date" id="filtro-data-inicio"></label>
-        <label>Até: <input type="date" id="filtro-data-fim"></label>
-        <button class="btn-secundario" id="btn-filtrar">Filtrar</button>
-        <button class="btn-secundario" id="btn-limpar-filtro">Limpar filtro</button>
-        <button class="btn-principal" id="btn-nova-permuta">+ Nova Permuta</button>
-        <button class="btn-principal" id="btn-lote-permutas">+ Várias Permutas</button>
-        <button class="btn-secundario" id="btn-pdf-permutas">📄 PDF de Permutas</button>
-        <button class="btn-secundario" id="btn-pdf-combinado">📄 PDF Permutas + Folgas</button>
-      </div>
-      <div class="tabela-wrapper">
-        <table class="tabela-dados">
-          <thead>
-            <tr>
-              <th>Data</th><th>Posto</th><th>Turno</th><th>Escalado</th><th>Substituto</th>
-              <th>HP</th><th>Recebido</th><th>Recebido por</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="corpo-tabela-permutas"></tbody>
-        </table>
-      </div>
-    </section>
+      <nav class="abas">
+        <button data-aba="hoje" class="ativa">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <span>Hoje</span>
+        </button>
+        <button data-aba="permutas">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+          <span>Permutas</span>
+        </button>
+        <button data-aba="folgas">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <span>Folgas</span>
+        </button>
+        <button data-aba="hp">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V10M10 20V4M17 20v-7"/></svg>
+          <span>HP</span>
+        </button>
+        <button data-aba="devendo">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+          <span>Devendo</span>
+        </button>
+        <div class="sidebar-separador"></div>
+        <button data-aba="admin" id="aba-admin-botao" class="hidden">
+          <svg class="nav-icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09A1.65 1.65 0 0015 4.6a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <span>Painel Admin</span>
+        </button>
+      </nav>
 
-    <!-- ---------- ABA FOLGAS ---------- -->
-    <section id="secao-folgas" class="hidden">
-      <div class="barra-acoes">
-        <label>De: <input type="date" id="filtro-folga-data-inicio"></label>
-        <label>Até: <input type="date" id="filtro-folga-data-fim"></label>
-        <button class="btn-secundario" id="btn-filtrar-folgas">Filtrar</button>
-        <button class="btn-secundario" id="btn-limpar-filtro-folgas">Limpar filtro</button>
-        <button class="btn-principal" id="btn-nova-folga">+ Nova Folga</button>
-      </div>
-      <div class="tabela-wrapper">
-        <table class="tabela-dados">
-          <thead>
-            <tr><th>Data</th><th>QRA</th><th>Posto</th><th>Observação</th><th></th></tr>
-          </thead>
-          <tbody id="corpo-tabela-folgas"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ---------- ABA HP (RANKING) ---------- -->
-    <section id="secao-hp" class="hidden">
-      <div class="barra-acoes">
-        <label>Mês: <input type="month" id="filtro-hp-mes"></label>
-        <button class="btn-secundario" id="btn-ver-ranking-hp">Ver ranking</button>
-      </div>
-      <p style="font-size:13px; color:#666; margin-top:-6px;">
-        <span class="hp-selo hp-verde">até 119h</span>
-        <span class="hp-selo hp-laranja">120h</span>
-        <span class="hp-selo hp-vermelho">acima de 120h</span>
-      </p>
-      <div class="tabela-wrapper">
-        <table class="tabela-dados">
-          <thead>
-            <tr><th>#</th><th>Agente (Escalado)</th><th>HP no mês</th></tr>
-          </thead>
-          <tbody id="corpo-tabela-hp"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ---------- ABA DEVENDO ---------- -->
-    <section id="secao-devendo" class="hidden">
-      <div class="barra-acoes">
-        <label>De: <input type="date" id="filtro-devendo-data-inicio"></label>
-        <label>Até: <input type="date" id="filtro-devendo-data-fim"></label>
-        <button class="btn-secundario" id="btn-filtrar-devendo">Filtrar</button>
-        <button class="btn-secundario" id="btn-limpar-filtro-devendo">Limpar filtro</button>
-        <button class="btn-principal" id="btn-nova-devendo">+ Novo Devendo</button>
-      </div>
-      <div class="tabela-wrapper">
-        <table class="tabela-dados">
-          <thead>
-            <tr><th>Data</th><th>QRA</th><th>Turno</th><th>Posto</th><th>Autorizado por</th><th>Observação</th><th></th></tr>
-          </thead>
-          <tbody id="corpo-tabela-devendo"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ---------- ABA ADMIN ---------- -->
-    <section id="secao-admin" class="hidden">
-      <div class="grid-admin">
-        <div class="cartao-admin">
-          <h3>Postos</h3>
-          <ul class="lista-simples" id="lista-postos"></ul>
-          <form class="form-inline" id="form-add-posto">
-            <input type="text" id="input-novo-posto" placeholder="Novo posto" required>
-            <button class="btn-principal" type="submit">+</button>
-          </form>
+      <div class="sidebar-rodape">
+        <div class="sidebar-avatar">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
+        <span class="usuario" id="usuario-logado"></span>
+        <button id="btn-sair" aria-label="Sair">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
+    </aside>
 
-        <div class="cartao-admin">
-          <h3>Turnos</h3>
-          <ul class="lista-simples" id="lista-turnos"></ul>
-          <form class="form-inline" id="form-add-turno">
-            <input type="text" id="input-novo-turno" placeholder="Nome do turno" required>
-            <input type="number" id="input-novo-turno-horas" placeholder="Horas" style="max-width:70px" required>
-            <button class="btn-principal" type="submit">+</button>
-          </form>
-        </div>
+    <!-- ---------- ÁREA PRINCIPAL ---------- -->
+    <div class="area-principal">
 
-        <div class="cartao-admin">
-          <h3>Recebido por</h3>
-          <ul class="lista-simples" id="lista-recebido-por"></ul>
-          <form class="form-inline" id="form-add-recebido-por">
-            <input type="text" id="input-novo-recebido-por" placeholder="Nome" required>
-            <button class="btn-principal" type="submit">+</button>
-          </form>
-        </div>
+      <div id="status-carregamento" class="status-carregamento hidden">
+        <span id="status-carregamento-texto">Carregando dados...</span>
+        <button id="btn-tentar-novamente-carregamento" class="btn-secundario hidden">Tentar novamente</button>
+      </div>
 
-        <div class="cartao-admin">
-          <h3>Autorizado por</h3>
-          <ul class="lista-simples" id="lista-autorizado-por"></ul>
-          <form class="form-inline" id="form-add-autorizado-por">
-            <input type="text" id="input-novo-autorizado-por" placeholder="Nome" required>
-            <button class="btn-principal" type="submit">+</button>
-          </form>
-        </div>
+      <main class="conteudo">
 
-        <div class="cartao-admin">
-          <h3>Funcionários</h3>
-          <ul class="lista-simples" id="lista-funcionarios"></ul>
-          <form id="form-add-funcionario" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
-            <input type="hidden" id="input-func-qra-original">
-            <input type="text" id="input-func-nome" placeholder="Nome completo" required>
-            <input type="text" id="input-func-classe" placeholder="Classe (ex: GCM 3° CLASSE)" required>
-            <input type="text" id="input-func-qra" placeholder="QRA (ex: GCM 3° CLASSE SILVA)" required>
-            <input type="email" id="input-func-email" placeholder="Email (opcional)">
-            <div style="display:flex; gap:6px;">
-              <button class="btn-principal" type="submit" id="btn-salvar-funcionario">Adicionar funcionário</button>
-              <button class="btn-secundario hidden" type="button" id="btn-cancelar-edicao-funcionario">Cancelar</button>
+        <!-- ---------- ABA HOJE ---------- -->
+        <section id="secao-hoje">
+          <div class="painel-hoje">
+            <div class="painel-hoje-cabecalho">
+              <div>
+                <p class="painel-hoje-selo">PAINEL DO DIA</p>
+                <p class="painel-hoje-data" id="hoje-data-extenso">—</p>
+              </div>
+              <span class="painel-hoje-icone"><img src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu"></span>
             </div>
-          </form>
-        </div>
-      </div>
-    </section>
+            <div class="painel-hoje-metricas">
+              <div class="painel-hoje-metrica">
+                <p class="painel-hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
+                <p class="painel-hoje-metrica-label">Permutas hoje</p>
+              </div>
+              <div class="painel-hoje-metrica">
+                <p class="painel-hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
+                <p class="painel-hoje-metrica-label">Folgas hoje</p>
+              </div>
+            </div>
+            <div class="painel-hoje-colunas">
+              <div>
+                <p class="painel-hoje-coluna-titulo">🔁 Permutas</p>
+                <div id="hoje-lista-permutas"></div>
+              </div>
+              <div>
+                <p class="painel-hoje-coluna-titulo">🏖️ Folgas previstas</p>
+                <div id="hoje-lista-folgas"></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  </main>
+        <!-- ---------- ABA PERMUTAS ---------- -->
+        <section id="secao-permutas" class="hidden">
+          <div class="cabecalho-secao"><h1>Permutas</h1></div>
+          <div class="barra-acoes">
+            <label>De: <input type="date" id="filtro-data-inicio"></label>
+            <label>Até: <input type="date" id="filtro-data-fim"></label>
+            <button class="btn-secundario" id="btn-filtrar">Filtrar</button>
+            <button class="btn-secundario" id="btn-limpar-filtro">Limpar filtro</button>
+            <button class="btn-principal" id="btn-nova-permuta">+ Nova Permuta</button>
+            <button class="btn-principal" id="btn-lote-permutas">+ Várias Permutas</button>
+            <button class="btn-secundario" id="btn-pdf-permutas">📄 PDF de Permutas</button>
+            <button class="btn-secundario" id="btn-pdf-combinado">📄 PDF Permutas + Folgas</button>
+          </div>
+          <div class="tabela-wrapper">
+            <table class="tabela-dados">
+              <thead>
+                <tr>
+                  <th>Data</th><th>Posto</th><th>Turno</th><th>Escalado</th><th>Substituto</th>
+                  <th>HP</th><th>Recebido</th><th>Recebido por</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="corpo-tabela-permutas"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---------- ABA FOLGAS ---------- -->
+        <section id="secao-folgas" class="hidden">
+          <div class="cabecalho-secao"><h1>Folgas</h1></div>
+          <div class="barra-acoes">
+            <label>De: <input type="date" id="filtro-folga-data-inicio"></label>
+            <label>Até: <input type="date" id="filtro-folga-data-fim"></label>
+            <button class="btn-secundario" id="btn-filtrar-folgas">Filtrar</button>
+            <button class="btn-secundario" id="btn-limpar-filtro-folgas">Limpar filtro</button>
+            <button class="btn-principal" id="btn-nova-folga">+ Nova Folga</button>
+          </div>
+          <div class="tabela-wrapper">
+            <table class="tabela-dados">
+              <thead>
+                <tr><th>Data</th><th>QRA</th><th>Posto</th><th>Observação</th><th></th></tr>
+              </thead>
+              <tbody id="corpo-tabela-folgas"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---------- ABA HP (RANKING) ---------- -->
+        <section id="secao-hp" class="hidden">
+          <div class="cabecalho-secao"><h1>HP — Ranking de horas</h1></div>
+          <div class="barra-acoes">
+            <label>Mês: <input type="month" id="filtro-hp-mes"></label>
+            <button class="btn-secundario" id="btn-ver-ranking-hp">Ver ranking</button>
+          </div>
+          <p style="font-size:13px; color:#666; margin-top:-6px;">
+            <span class="hp-selo hp-verde">até 119h</span>
+            <span class="hp-selo hp-laranja">120h</span>
+            <span class="hp-selo hp-vermelho">acima de 120h</span>
+          </p>
+          <div class="tabela-wrapper">
+            <table class="tabela-dados">
+              <thead>
+                <tr><th>#</th><th>Agente (Escalado)</th><th>HP no mês</th></tr>
+              </thead>
+              <tbody id="corpo-tabela-hp"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---------- ABA DEVENDO ---------- -->
+        <section id="secao-devendo" class="hidden">
+          <div class="cabecalho-secao"><h1>Devendo</h1></div>
+          <div class="barra-acoes">
+            <label>De: <input type="date" id="filtro-devendo-data-inicio"></label>
+            <label>Até: <input type="date" id="filtro-devendo-data-fim"></label>
+            <button class="btn-secundario" id="btn-filtrar-devendo">Filtrar</button>
+            <button class="btn-secundario" id="btn-limpar-filtro-devendo">Limpar filtro</button>
+            <button class="btn-principal" id="btn-nova-devendo">+ Novo Devendo</button>
+          </div>
+          <div class="tabela-wrapper">
+            <table class="tabela-dados">
+              <thead>
+                <tr><th>Data</th><th>QRA</th><th>Turno</th><th>Posto</th><th>Autorizado por</th><th>Observação</th><th></th></tr>
+              </thead>
+              <tbody id="corpo-tabela-devendo"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---------- ABA ADMIN ---------- -->
+        <section id="secao-admin" class="hidden">
+          <div class="cabecalho-secao"><h1>Painel Admin</h1></div>
+          <div class="grid-admin">
+            <div class="cartao-admin">
+              <h3>Postos</h3>
+              <ul class="lista-simples" id="lista-postos"></ul>
+              <form class="form-inline" id="form-add-posto">
+                <input type="text" id="input-novo-posto" placeholder="Novo posto" required>
+                <button class="btn-principal" type="submit">+</button>
+              </form>
+            </div>
+
+            <div class="cartao-admin">
+              <h3>Turnos</h3>
+              <ul class="lista-simples" id="lista-turnos"></ul>
+              <form class="form-inline" id="form-add-turno">
+                <input type="text" id="input-novo-turno" placeholder="Nome do turno" required>
+                <input type="number" id="input-novo-turno-horas" placeholder="Horas" style="max-width:70px" required>
+                <button class="btn-principal" type="submit">+</button>
+              </form>
+            </div>
+
+            <div class="cartao-admin">
+              <h3>Recebido por</h3>
+              <ul class="lista-simples" id="lista-recebido-por"></ul>
+              <form class="form-inline" id="form-add-recebido-por">
+                <input type="text" id="input-novo-recebido-por" placeholder="Nome" required>
+                <button class="btn-principal" type="submit">+</button>
+              </form>
+            </div>
+
+            <div class="cartao-admin">
+              <h3>Autorizado por</h3>
+              <ul class="lista-simples" id="lista-autorizado-por"></ul>
+              <form class="form-inline" id="form-add-autorizado-por">
+                <input type="text" id="input-novo-autorizado-por" placeholder="Nome" required>
+                <button class="btn-principal" type="submit">+</button>
+              </form>
+            </div>
+
+            <div class="cartao-admin">
+              <h3>Funcionários</h3>
+              <ul class="lista-simples" id="lista-funcionarios"></ul>
+              <form id="form-add-funcionario" style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+                <input type="hidden" id="input-func-qra-original">
+                <input type="text" id="input-func-nome" placeholder="Nome completo" required>
+                <input type="text" id="input-func-classe" placeholder="Classe (ex: GCM 3° CLASSE)" required>
+                <input type="text" id="input-func-qra" placeholder="QRA (ex: GCM 3° CLASSE SILVA)" required>
+                <input type="email" id="input-func-email" placeholder="Email (opcional)">
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-principal" type="submit" id="btn-salvar-funcionario">Adicionar funcionário</button>
+                  <button class="btn-secundario hidden" type="button" id="btn-cancelar-edicao-funcionario">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
 </div>
 
 <!-- ===================== MODAL — NOVA/EDITAR PERMUTA ===================== -->

@@ -1,13 +1,20 @@
 :root {
   --navy: #1A2B5E;
   --navy-dark: #10193d;
+  --navy-mid: #1F3270;
   --gold: #C8A84B;
   --gold-light: #e6d5a0;
-  --bg: #f4f2ec;
+  --bg: #F4F2EC;
+  --bg-conteudo: #F4F2EC;
   --white: #ffffff;
+  --borda: #E4DFD0;
+  --texto-claro: #AEB9DC;
   --danger: #b3413a;
   --text: #21273a;
   --radius: 10px;
+  --radius-lg: 12px;
+  --sombra-card: 0 1px 4px rgba(16,25,61,0.08);
+  --sombra-card-hover: 0 4px 14px rgba(16,25,61,0.12);
 }
 
 * { box-sizing: border-box; }
@@ -33,6 +40,12 @@ body {
   background: linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%);
   color: var(--white);
   padding: 24px;
+}
+
+.login-brasao {
+  height: 76px;
+  width: auto;
+  margin-bottom: 14px;
 }
 
 #tela-login h1 {
@@ -97,57 +110,164 @@ body {
   background: transparent;
 }
 
-/* ---------- APP PRINCIPAL ---------- */
+/* ---------- APP PRINCIPAL / LAYOUT COM BARRA LATERAL ---------- */
 
-#app {
+#app { min-height: 100vh; }
+
+.layout-app {
+  display: flex;
+  flex-wrap: wrap;
   min-height: 100vh;
+}
+
+/* ---------- BARRA LATERAL ---------- */
+
+.sidebar {
+  flex: 0 0 258px;
+  min-width: 258px;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: var(--white);
+  padding: 22px 16px;
   display: flex;
   flex-direction: column;
+  gap: 22px;
+  box-sizing: border-box;
 }
 
-header.topo {
-  background: var(--navy);
-  color: var(--white);
-  padding: 14px 20px;
+.sidebar-marca {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  padding: 0 6px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
-header.topo h1 { font-size: 18px; margin: 0; color: var(--gold); }
-header.topo .usuario { font-size: 15px; color: #cfd6ec; }
-header.topo button#btn-sair {
-  background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  padding: 6px 12px;
-  border-radius: var(--radius);
-  cursor: pointer;
+.sidebar-marca img {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
+
+.sidebar-marca-titulo {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  color: var(--white);
+}
+
+.sidebar-marca-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--texto-claro);
 }
 
 nav.abas {
   display: flex;
-  gap: 4px;
-  background: var(--navy-dark);
-  padding: 0 20px;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 3px;
 }
 
 nav.abas button {
-  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
   border: none;
-  color: #cfd6ec;
-  padding: 12px 16px;
+  background: transparent;
+  color: #D3DAF0;
+  font-size: 14.5px;
   cursor: pointer;
-  border-bottom: 3px solid transparent;
-  font-size: 16px;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
   white-space: nowrap;
 }
 
+nav.abas button:hover { background: rgba(200,168,75,0.14); color: #F3E7C4; }
+
 nav.abas button.ativa {
-  color: var(--gold);
-  border-bottom: 3px solid var(--gold);
-  font-weight: bold;
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 700;
+}
+
+nav.abas button.ativa:hover { background: var(--gold); color: var(--navy-dark); }
+
+.nav-icone { flex-shrink: 0; }
+
+.sidebar-separador {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin: 8px 4px;
+}
+
+.sidebar-rodape {
+  margin-top: auto;
+  padding: 12px 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-rodape .usuario {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-rodape #btn-sair {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #D3DAF0;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-rodape #btn-sair:hover { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); }
+
+/* ---------- ÁREA PRINCIPAL ---------- */
+
+.area-principal {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-conteudo);
+}
+
+.cabecalho-secao {
+  margin-bottom: 4px;
+}
+
+.cabecalho-secao h1 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--navy-dark);
 }
 
 /* ---------- PAINEL "HOJE" (aba dedicada — visual azul intenso) ---------- */
@@ -266,10 +386,11 @@ nav.abas button.ativa {
 
 main.conteudo {
   flex: 1;
-  padding: 20px;
-  max-width: 1100px;
+  padding: 28px 32px 40px;
+  max-width: 1180px;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .barra-acoes {
@@ -277,6 +398,7 @@ main.conteudo {
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 16px;
+  margin-top: 16px;
   align-items: center;
 }
 
@@ -307,6 +429,8 @@ button.btn-secundario {
   cursor: pointer;
 }
 
+button.btn-secundario:hover { background: #F4F2EC; }
+
 button.btn-perigo {
   background: var(--white);
   color: var(--danger);
@@ -318,18 +442,54 @@ button.btn-perigo {
 }
 
 /* ---------- RESPONSIVIDADE (telas pequenas / celular) ----------
-   Estas regras só entram em ação abaixo de 768px de largura.
-   A versão para telas grandes (desktop) não é afetada. */
+   Abaixo de 768px, a barra lateral vira uma barra superior horizontal
+   com rolagem, para caber em telas de celular. A versão desktop (acima
+   dessa largura) não é afetada por estas regras. */
 @media (max-width: 768px) {
-  header.topo {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+  .layout-app { flex-direction: column; }
+
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    gap: 12px;
+    overflow-x: auto;
   }
 
-  header.topo h1 { font-size: 16px; }
+  .sidebar-marca {
+    flex-shrink: 0;
+    padding: 0 12px 0 0;
+    border-bottom: none;
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
 
-  main.conteudo { padding: 12px; }
+  .sidebar-marca-sub { display: none; }
+
+  nav.abas {
+    flex-direction: row;
+    flex: 1;
+    overflow-x: auto;
+  }
+
+  .sidebar-separador {
+    width: 1px;
+    height: 28px;
+    margin: 0 2px;
+  }
+
+  .sidebar-rodape {
+    margin-top: 0;
+    padding: 0 0 0 12px;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+  }
+
+  .sidebar-rodape .usuario { display: none; }
+
+  main.conteudo { padding: 16px; }
 
   .barra-acoes {
     flex-direction: column;
@@ -357,8 +517,8 @@ button.btn-perigo {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: var(--radius);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--sombra-card);
 }
 
 table.tabela-dados {
@@ -468,14 +628,18 @@ table.tabela-dados tr:hover { background: #faf8f2; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
+  margin-top: 16px;
 }
 
 .cartao-admin {
   background: var(--white);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   padding: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: var(--sombra-card);
+  transition: box-shadow 0.15s;
 }
+
+.cartao-admin:hover { box-shadow: var(--sombra-card-hover); }
 
 .cartao-admin h3 { color: var(--navy); margin-top: 0; }
 
