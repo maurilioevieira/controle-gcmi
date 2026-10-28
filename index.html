@@ -105,20 +105,27 @@
             <img class="hoje-icone" src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu">
           </div>
 
+          <div class="barra-acoes">
+            <label>Ver dia: <input type="date" id="hoje-data-selecionada"></label>
+            <button class="btn-principal" id="btn-hoje-nova-permuta">+ Nova Permuta</button>
+            <button class="btn-principal" id="btn-hoje-lote-permutas">+ Várias Permutas</button>
+            <button class="btn-secundario" id="btn-hoje-pdf-dia">📄 PDF Permutas + Folgas do dia</button>
+          </div>
+
           <div class="hoje-metricas">
             <div class="hoje-metrica hoje-metrica-destaque">
               <p class="hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
-              <p class="hoje-metrica-label">Permutas hoje</p>
+              <p class="hoje-metrica-label">Permutas</p>
             </div>
             <div class="hoje-metrica">
               <p class="hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
-              <p class="hoje-metrica-label">Folgas hoje</p>
+              <p class="hoje-metrica-label">Folgas</p>
             </div>
           </div>
 
           <div class="hoje-colunas">
             <div class="cartao-hoje">
-              <p class="hoje-coluna-titulo">🔁 Permutas de hoje</p>
+              <p class="hoje-coluna-titulo">🔁 Permutas</p>
               <div id="hoje-lista-permutas"></div>
             </div>
             <div class="cartao-hoje">

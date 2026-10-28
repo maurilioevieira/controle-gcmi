@@ -402,38 +402,68 @@ async function carregarPermutas(filtro = {}) {
   atualizarPainelHoje();
 }
 
-// ================= PAINEL "HOJE" (aba dedicada) =================
-function dataHojeBR() {
-  const d = new Date();
+// ================= PAINEL "HOJE" (aba dedicada — navega entre dias) =================
+function dataParaBR(d) {
   const dia = String(d.getDate()).padStart(2, '0');
   const mes = String(d.getMonth() + 1).padStart(2, '0');
   return `${dia}/${mes}/${d.getFullYear()}`;
 }
-
-function dataHojeExtenso() {
-  const texto = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+function dataParaISO(d) {
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  return `${d.getFullYear()}-${mes}-${dia}`;
+}
+function dataExtenso(d) {
+  const texto = d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
+// Mantidas por compatibilidade com o resto do código (sempre "hoje" de verdade).
+function dataHojeBR() { return dataParaBR(new Date()); }
+function dataHojeExtenso() { return dataExtenso(new Date()); }
+
+// Dia atualmente exibido no painel — começa em hoje, mas o agente pode trocar
+// pelo seletor de data para ver permutas/folgas de outro dia sem sair da aba.
+let dataPainelHoje = new Date();
 
 async function atualizarPainelHoje() {
-  const hoje = dataHojeBR();
-  document.getElementById('hoje-data-extenso').textContent = dataHojeExtenso();
+  const dataBR = dataParaBR(dataPainelHoje);
+  document.getElementById('hoje-data-extenso').textContent = dataExtenso(dataPainelHoje);
   try {
-    const [permutasHoje, folgasHoje] = await Promise.all([
-      chamarApi('listPermutas', { dataInicio: hoje, dataFim: hoje }),
-      chamarApi('listFolgas', { dataInicio: hoje, dataFim: hoje })
+    const [permutasDoDia, folgasDoDia] = await Promise.all([
+      chamarApi('listPermutas', { dataInicio: dataBR, dataFim: dataBR }),
+      chamarApi('listFolgas', { dataInicio: dataBR, dataFim: dataBR })
     ]);
-    document.getElementById('hoje-contagem-permutas').textContent = permutasHoje.length;
-    document.getElementById('hoje-contagem-folgas').textContent = folgasHoje.length;
+    document.getElementById('hoje-contagem-permutas').textContent = permutasDoDia.length;
+    document.getElementById('hoje-contagem-folgas').textContent = folgasDoDia.length;
 
-    renderizarListaHoje('hoje-lista-permutas', permutasHoje, 'permuta',
+    renderizarListaHoje('hoje-lista-permutas', permutasDoDia, 'permuta',
       p => `${p.POSTO} — ${p.TURNO}`, p => `${p.ESCALADO} → ${p.SUBSTITUTO}`);
-    renderizarListaHoje('hoje-lista-folgas', folgasHoje, 'folga',
+    renderizarListaHoje('hoje-lista-folgas', folgasDoDia, 'folga',
       f => `${f.QRA} — ${f.POSTO}`, f => f.OBSERVACAO || 'Folga da escala');
   } catch (e) {
     console.error('Erro ao carregar painel do dia:', e);
   }
 }
+
+function inicializarSeletorDataHoje() {
+  const input = document.getElementById('hoje-data-selecionada');
+  input.value = dataParaISO(dataPainelHoje);
+  input.addEventListener('change', () => {
+    if (!input.value) return;
+    const [ano, mes, dia] = input.value.split('-').map(Number);
+    dataPainelHoje = new Date(ano, mes - 1, dia);
+    atualizarPainelHoje();
+  });
+}
+inicializarSeletorDataHoje();
+
+// Atalhos do painel "Hoje": abrem os mesmos modais/ações já usados na aba Permutas.
+document.getElementById('btn-hoje-nova-permuta').addEventListener('click', () => abrirModalPermuta(null));
+document.getElementById('btn-hoje-lote-permutas').addEventListener('click', () => abrirModalLote());
+document.getElementById('btn-hoje-pdf-dia').addEventListener('click', (ev) => {
+  const dataBR = dataParaBR(dataPainelHoje);
+  gerarEBaixarPdf('combinado', ev.target, { dataInicio: dataBR, dataFim: dataBR });
+});
 
 function renderizarListaHoje(idContainer, itens, classeExtra, formatarTitulo, formatarSub) {
   const div = document.getElementById(idContainer);
@@ -596,7 +626,7 @@ document.getElementById('btn-add-linha-lote').addEventListener('click', () => {
   }
 });
 
-document.getElementById('btn-lote-permutas').addEventListener('click', () => {
+function abrirModalLote() {
   document.getElementById('form-lote').reset();
   document.getElementById('lote-escalado-valor').value = '';
   document.getElementById('lote-substituto-valor').value = '';
@@ -604,7 +634,8 @@ document.getElementById('btn-lote-permutas').addEventListener('click', () => {
   containerLinhasLote.appendChild(criarLinhaLote());
   atualizarBotaoAddLinha();
   modalLote.classList.remove('hidden');
-});
+}
+document.getElementById('btn-lote-permutas').addEventListener('click', abrirModalLote);
 document.getElementById('btn-cancelar-lote').addEventListener('click', () => modalLote.classList.add('hidden'));
 
 configurarAutocomplete('lote-escalado-busca', 'lote-escalado-valor', 'lista-autocomplete-lote-escalado');
@@ -717,14 +748,19 @@ function periodoTexto(dataInicio, dataFim) {
   return dataFim && dataFim !== dataInicio ? `${dataInicio} a ${dataFim}` : dataInicio;
 }
 
-async function gerarEBaixarPdf(tipo, botao) {
+async function gerarEBaixarPdf(tipo, botao, filtroPersonalizado) {
   const textoOriginal = botao.textContent;
   botao.disabled = true;
   botao.textContent = 'Gerando PDF...';
 
-  const ini = document.getElementById('filtro-data-inicio').value;
-  const fim = document.getElementById('filtro-data-fim').value;
-  const filtro = { dataInicio: isoParaBR(ini), dataFim: isoParaBR(fim || ini) };
+  let filtro;
+  if (filtroPersonalizado) {
+    filtro = filtroPersonalizado;
+  } else {
+    const ini = document.getElementById('filtro-data-inicio').value;
+    const fim = document.getElementById('filtro-data-fim').value;
+    filtro = { dataInicio: isoParaBR(ini), dataFim: isoParaBR(fim || ini) };
+  }
   const periodo = periodoTexto(filtro.dataInicio, filtro.dataFim);
 
   try {
