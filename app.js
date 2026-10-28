@@ -366,16 +366,7 @@ document.querySelectorAll('nav.abas button[data-aba]').forEach(btn => {
     if (btn.dataset.aba === 'admin') renderizarAdmin();
     if (btn.dataset.aba === 'hp') carregarRankingHP();
     if (btn.dataset.aba === 'hoje') atualizarPainelHoje();
-    // No celular, o menu fica aberto sobre a tela até uma aba ser escolhida — fecha sozinho aqui.
-    document.querySelector('.sidebar').classList.remove('menu-aberto');
   });
-});
-
-// ================= MENU MOBILE (botão ☰) =================
-document.getElementById('btn-menu-mobile').addEventListener('click', () => {
-  const sidebar = document.querySelector('.sidebar');
-  const aberto = sidebar.classList.toggle('menu-aberto');
-  document.getElementById('btn-menu-mobile').setAttribute('aria-expanded', aberto ? 'true' : 'false');
 });
 
 // ================= CARREGAR LISTAS BASE (postos, turnos, recebido por, funcionários) =================

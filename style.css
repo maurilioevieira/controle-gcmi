@@ -134,8 +134,6 @@ body {
   box-sizing: border-box;
 }
 
-.btn-menu-mobile { display: none; }
-
 .sidebar-marca {
   display: flex;
   align-items: center;
@@ -458,32 +456,15 @@ button.btn-perigo {
     align-items: center;
     width: 100%;
     min-width: 0;
-    padding: 10px 12px;
+    padding: 10px 12px 0;
     gap: 10px;
   }
 
-  .btn-menu-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    cursor: pointer;
-    flex-shrink: 0;
-    order: 1;
-  }
-
-  .btn-menu-mobile:hover { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); }
-
   .sidebar-marca {
-    order: 2;
+    order: 1;
     flex: 1 1 auto;
     min-width: 0;
-    padding: 0;
+    padding: 0 0 10px;
     border-bottom: none;
   }
 
@@ -496,32 +477,36 @@ button.btn-perigo {
   }
 
   .sidebar-rodape {
-    order: 3;
+    order: 2;
     margin-top: 0;
-    padding: 0;
+    padding: 0 0 10px;
     border-top: none;
     flex-shrink: 0;
   }
 
   .sidebar-rodape .usuario { display: none; }
 
-  /* Menu de navegação: no celular fica escondido até o botão ☰ ser tocado;
-     quando aberto, vira uma lista vertical de toque fácil, logo abaixo da faixa superior. */
+  /* Abas como lista horizontal rolável, numa faixa própria abaixo da marca —
+     os botões nunca encolhem (flex-shrink:0); se não couberem todos, a faixa
+     desliza com o dedo, exatamente como no Estoque V3. */
   nav.abas {
-    order: 4;
+    order: 3;
     flex-basis: 100%;
     width: 100%;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 10px;
-    max-height: 65vh;
-    overflow-y: auto;
+    flex-direction: row;
+    gap: 6px;
+    padding: 10px 0;
+    margin: 0 -12px;
+    padding-inline: 12px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .sidebar.menu-aberto nav.abas { display: flex; }
-
-  nav.abas button { width: 100%; padding: 12px 14px; font-size: 15.5px; }
+  nav.abas button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 
   .sidebar-separador { display: none; }
 
