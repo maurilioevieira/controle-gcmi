@@ -97,33 +97,33 @@
 
         <!-- ---------- ABA HOJE ---------- -->
         <section id="secao-hoje">
-          <div class="painel-hoje">
-            <div class="painel-hoje-cabecalho">
-              <div>
-                <p class="painel-hoje-selo">PAINEL DO DIA</p>
-                <p class="painel-hoje-data" id="hoje-data-extenso">—</p>
-              </div>
-              <span class="painel-hoje-icone"><img src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu"></span>
+          <div class="cabecalho-secao cabecalho-hoje">
+            <div>
+              <p class="hoje-selo">PAINEL DO DIA</p>
+              <h1 id="hoje-data-extenso">—</h1>
             </div>
-            <div class="painel-hoje-metricas">
-              <div class="painel-hoje-metrica">
-                <p class="painel-hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
-                <p class="painel-hoje-metrica-label">Permutas hoje</p>
-              </div>
-              <div class="painel-hoje-metrica">
-                <p class="painel-hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
-                <p class="painel-hoje-metrica-label">Folgas hoje</p>
-              </div>
+            <img class="hoje-icone" src="img/brasao-gcm.png" alt="Brasão da GCM Iguatu">
+          </div>
+
+          <div class="hoje-metricas">
+            <div class="hoje-metrica hoje-metrica-destaque">
+              <p class="hoje-metrica-numero" id="hoje-contagem-permutas">0</p>
+              <p class="hoje-metrica-label">Permutas hoje</p>
             </div>
-            <div class="painel-hoje-colunas">
-              <div>
-                <p class="painel-hoje-coluna-titulo">🔁 Permutas</p>
-                <div id="hoje-lista-permutas"></div>
-              </div>
-              <div>
-                <p class="painel-hoje-coluna-titulo">🏖️ Folgas previstas</p>
-                <div id="hoje-lista-folgas"></div>
-              </div>
+            <div class="hoje-metrica">
+              <p class="hoje-metrica-numero" id="hoje-contagem-folgas">0</p>
+              <p class="hoje-metrica-label">Folgas hoje</p>
+            </div>
+          </div>
+
+          <div class="hoje-colunas">
+            <div class="cartao-hoje">
+              <p class="hoje-coluna-titulo">🔁 Permutas de hoje</p>
+              <div id="hoje-lista-permutas"></div>
+            </div>
+            <div class="cartao-hoje">
+              <p class="hoje-coluna-titulo">🏖️ Folgas previstas</p>
+              <div id="hoje-lista-folgas"></div>
             </div>
           </div>
         </section>
